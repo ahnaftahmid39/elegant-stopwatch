@@ -1,3 +1,3 @@
-# Simple Timer
+# Simple Stopwatch
 
-A timer that starts and stops using spacebar or button click.
+A stopwatch that starts and stops using spacebar or button click.

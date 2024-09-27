@@ -51,12 +51,13 @@ const App = () => {
     if (theme === LIGHT) setTheme(DARK);
   };
 
-  useInterval(
-    () => {
+  useInterval({
+    callback: () => {
       setMs(ms + 1000);
     },
-    !started || paused ? null : 1000
-  );
+    delay: !started || paused ? null : 1000,
+    immediate: true,
+  });
 
   const startTimer = () => {
     setStarted(true);
@@ -88,14 +89,17 @@ const App = () => {
     else pauseTimer();
   };
 
-  useHotkeys("space", togglePause);
+  useHotkeys<HTMLDivElement>("space", togglePause, {
+    keyup: true,
+    preventDefault: true,
+  });
 
   return (
     <div className="flex flex-col min-h-svh">
       <div className="flex-grow flex items-center justify-center">
         <button
           onClick={togglePause}
-          className="p-4 text-card-foreground text-6xl x-sm:text-7xl sm:text-9xl"
+          className="focus:outline-none p-4 text-card-foreground text-6xl x-sm:text-7xl sm:text-9xl"
         >
           {formatSeconds(ms)}
         </button>
