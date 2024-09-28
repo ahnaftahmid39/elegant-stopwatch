@@ -105,7 +105,7 @@ const App = () => {
         </button>
       </div>
       <nav className="flex">
-        <Card className="p-2 sm:p-4 bg-card text-card-foreground border rounded-lg mb-5 mx-auto flex gap-2">
+        <Card className="p-2 sm:p-4 bg-card text-card-foreground border rounded-md mb-5 mx-auto flex gap-2">
           <Button variant={"outline"} onClick={toggleTimer}>
             {started ? (
               <>
@@ -133,7 +133,7 @@ const App = () => {
             )}
           </Button>
           <Button variant={"outline"} onClick={toggleTheme}>
-            {theme === THEME_TYPES.DARK ? (
+            {theme === THEME_TYPES.LIGHT ? (
               <>
                 <SunIcon className="sm:mr-2 h-4 w-4" />
                 <span className="hidden sm:inline">Light</span>
