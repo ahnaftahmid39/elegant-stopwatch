@@ -31,6 +31,8 @@ const THEME_TYPES = {
 };
 
 const App = () => {
+  const [startingTime, setStartingTime] = useState<Date | null>(null);
+  const [prevTime, setPrevTime] = useState<Date | null>(null);
   const [started, setStarted] = useState(false);
   const [paused, setPaused] = useState(false);
   const [ms, setMs] = useState<number>(0);
@@ -53,17 +55,27 @@ const App = () => {
 
   useInterval({
     callback: () => {
-      setMs(ms + 1000);
+      if (prevTime) {
+        const currentTime = new Date();
+        const timeDiff = currentTime.getTime() - prevTime.getTime();
+        setMs(ms + timeDiff);
+        setPrevTime(currentTime);
+      }
     },
     delay: !started || paused ? null : 1000,
     immediate: true,
   });
 
   const startTimer = () => {
+    const currentTime = new Date();
+    setStartingTime(currentTime);
+    setPrevTime(currentTime);
     setStarted(true);
   };
 
   const resetTimer = () => {
+    setStartingTime(null);
+    setPrevTime(null);
     setStarted(false);
     setPaused(false);
     setMs(0);
@@ -73,10 +85,15 @@ const App = () => {
     else startTimer();
   };
   const pauseTimer = () => {
+    if (prevTime) {
+      setMs(ms + new Date().getTime() - prevTime.getTime());
+    }
+    setPrevTime(null);
     setPaused(true);
   };
 
   const unpauseTimer = () => {
+    setPrevTime(new Date());
     setPaused(false);
   };
 
@@ -96,13 +113,19 @@ const App = () => {
 
   return (
     <div className="flex flex-col min-h-svh">
-      <div className="flex-grow flex items-center justify-center">
+      <div className="flex-grow flex flex-col items-center justify-center">
         <button
           onClick={togglePause}
           className="focus:outline-none p-4 text-card-foreground text-6xl x-sm:text-7xl sm:text-9xl"
         >
           {formatSeconds(ms)}
         </button>
+        {startingTime && (
+          <pre>
+            Staring Time: {startingTime.getHours()}:{startingTime.getMinutes()}:
+            {startingTime.getSeconds()}
+          </pre>
+        )}
       </div>
       <nav className="flex">
         <Card className="p-2 sm:p-4 bg-card text-card-foreground border rounded-md mb-5 mx-auto flex gap-2">
