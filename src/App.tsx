@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import useInterval from "@/hooks/use-interval";
 import {
@@ -8,8 +7,9 @@ import {
   ResetIcon,
   SunIcon,
 } from "@radix-ui/react-icons";
-import { Card } from "./components/ui/card";
+import { useEffect, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import { Card } from "./components/ui/card";
 
 const zeroPad = (num: number) => String(num).padStart(2, "0");
 
@@ -60,6 +60,7 @@ const App = () => {
         const timeDiff = currentTime.getTime() - prevTime.getTime();
         setMs(ms + timeDiff);
         setPrevTime(currentTime);
+        document.title = formatSeconds(ms + timeDiff)
       }
     },
     delay: !started || paused ? null : 1000,
